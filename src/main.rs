@@ -5,6 +5,16 @@
 use todo::task::*;
 
 fn main() {
-let todo = TaskList::default();
+let mut todo = TaskList::default();
+todo.add("eat cereal");
+todo.add("code!");
+todo.add("be happy"); 
+todo.display();
+
+
+ todo.rem("code!");
+todo.display();
+
+
 }
 
