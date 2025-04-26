@@ -43,7 +43,7 @@ impl TaskList {
 
 pub struct App {
     pub task_list: TaskList,
-    pub new_task_title: String, // Add this field to store the new task input
+    pub new_task_title: String, 
 }
 
 impl Default for App {
