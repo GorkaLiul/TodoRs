@@ -6,33 +6,15 @@ use egui::*;
 //use clap;
 use todo::task::*;
 
-fn main() {
-let mut todo = TaskList::default();
-todo.add("eat cereal");
-todo.add("code!");
-todo.add("be happy"); 
-todo.display();
-
-todo.rem("code!");
-todo.display();
-
-let options = eframe::NativeOptions::default();
-let mut checked1 = false;
-let mut checked2 = false;
-let mut checked3 = false;
-
-let mut slid : f32 = 0.0;
-eframe::run_simple_native("ToDors", options, move |ctx, _frame| {
-      egui::CentralPanel::default().show(ctx, |ui| {
-            ui.add(Checkbox::new(&mut checked1, "Task1"));
-            ui.add(Checkbox::new(&mut checked2, "Task2"));
-            ui.add(Checkbox::new(&mut checked3, "Task3"));
-
-            ui.add(Slider::new(&mut slid, 0.0..=100.0).text("Progress"))
-        });
-    });
 
 
+fn main() -> eframe::Result<()> {
+    let mut app = todo::task::App::default();
+    let options = eframe::NativeOptions::default();
+    eframe::run_native(
+        "Todo App",
+        options,
+        Box::new(|_cc| Ok(Box::new(app))),
+    )
 }
-
 
