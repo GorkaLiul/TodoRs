@@ -1,5 +1,3 @@
-use eframe::*;
-use egui::*;
 #[allow(dead_code)]
 #[allow(unused_variables)]
 //use std::env::args;
@@ -9,8 +7,12 @@ use todo::task::*;
 
 
 fn main() -> eframe::Result<()> {
-    let mut app = todo::task::App::default();
-    let options = eframe::NativeOptions::default();
+    let app = todo::task::App::default();
+    let options = eframe::NativeOptions{
+        persist_window: true,
+        ..Default::default()
+    };
+
     eframe::run_native(
         "Todo App",
         options,

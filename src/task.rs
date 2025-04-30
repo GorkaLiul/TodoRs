@@ -1,5 +1,5 @@
-use egui::{self, Checkbox, Ui};
-use eframe;
+use egui::{self, Checkbox, Context, ProgressBar, Ui};
+use eframe::{self, Frame};
 
 #[derive(Debug, Clone)]
 struct Task{
@@ -22,7 +22,7 @@ impl TaskList {
         TaskList { list: Vec::new() }
     }
 
-    pub fn from_task(task: Task) -> Self {
+     fn from_task(task: Task) -> Self {
         TaskList { list: vec![task] }
     }
 
@@ -46,46 +46,43 @@ pub struct App {
     pub new_task_title: String, 
 }
 
-impl Default for App {
+impl Default for App{
     fn default() -> Self {
-        Self {
+        App{
             task_list: TaskList::new(),
-            new_task_title: String::new(), // Initialize this field
+            new_task_title: String::new()
+
         }
     }
 }
 
-impl eframe::App for App {
-    fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
+
+impl eframe::App for App{
+    fn  update(&mut self, ctx: &Context, frame: &mut Frame){
         egui::CentralPanel::default().show(ctx, |ui| {
-            // Text input to add a task
-            ui.horizontal(|ui| {
-                ui.text_edit_singleline(&mut self.new_task_title);
-                if ui.button("Add Task").clicked() {
-                    if !self.new_task_title.is_empty() {
-                        self.task_list.add(&self.new_task_title);
-                        self.new_task_title.clear(); // Clear the input field after adding
-                    }
-                }
-            });
-
-            ui.separator(); // To separate input and task list
-
-            // Loop through all tasks and display them
-            for task in &mut self.task_list.list {
-                ui.checkbox(&mut task.status, &task.title); // Create checkbox for each task
+            ui.text_edit_singleline(&mut self.new_task_title); 
+            if ui.button("Add task").clicked(){
+                self.add(&self.new_task_title.clone());
+                self.new_task_title.clear();  
             }
+            for task in &mut self.task_list.list{
+                ui.checkbox(&mut task.status, &task.title);
+            }
+
+            //create function to process keyboard input
         });
     }
 }
 
 impl App {
-    pub fn add(&mut self, title: &str) {
-        self.task_list.add(title);
+    pub fn add(&mut self, title: &String) {
+        self.task_list.add(title.as_str());
     }
 
-    pub fn rem(&mut self, title: &str) {
-        self.task_list.rem(title);
+    pub fn rem(&mut self, title: &String) {
+        self.task_list.rem(title.as_str());
     }
+
+     //create function to process keyboard input
 }
 
