@@ -1,14 +1,14 @@
-use egui::{self, Checkbox, Context, ProgressBar, Ui};
 use eframe::{self, Frame};
+use egui::{self, Checkbox, Context, ProgressBar, Ui};
 
 #[derive(Debug, Clone)]
-struct Task{
-    status : bool,
-    title: String
+struct Task {
+    status: bool,
+    title: String,
 }
 
-pub struct TaskList { 
-    list: Vec<Task>
+pub struct TaskList {
+    list: Vec<Task>,
 }
 
 impl Default for TaskList {
@@ -22,12 +22,15 @@ impl TaskList {
         TaskList { list: Vec::new() }
     }
 
-     fn from_task(task: Task) -> Self {
+    fn from_task(task: Task) -> Self {
         TaskList { list: vec![task] }
     }
 
     pub fn add(&mut self, title: &str) {
-        self.list.push(Task { title: title.to_string(), status: false });
+        self.list.push(Task {
+            title: title.to_string(),
+            status: false,
+        });
     }
 
     pub fn rem(&mut self, title: &str) {
@@ -43,29 +46,30 @@ impl TaskList {
 
 pub struct App {
     pub task_list: TaskList,
-    pub new_task_title: String, 
+    pub new_task_title: String,
 }
 
-impl Default for App{
+impl Default for App {
     fn default() -> Self {
-        App{
+        App {
             task_list: TaskList::new(),
-            new_task_title: String::new()
-
+            new_task_title: String::new(),
         }
     }
 }
 
-
-impl eframe::App for App{
-    fn  update(&mut self, ctx: &Context, frame: &mut Frame){
+impl eframe::App for App {
+    fn update(&mut self, ctx: &Context, frame: &mut Frame) {
         egui::CentralPanel::default().show(ctx, |ui| {
-            ui.text_edit_singleline(&mut self.new_task_title); 
-            if ui.button("Add task").clicked(){
-                self.add(&self.new_task_title.clone());
-                self.new_task_title.clear();  
-            }
-            for task in &mut self.task_list.list{
+            ui.horizontal(|ui| {
+                ui.text_edit_singleline(&mut self.new_task_title);
+                if ui.button("Add task").clicked() {
+                    self.add(&self.new_task_title.clone());
+                    self.new_task_title.clear();
+                }
+            });
+            ui.separator();
+            for task in &mut self.task_list.list {
                 ui.checkbox(&mut task.status, &task.title);
             }
 
@@ -83,6 +87,5 @@ impl App {
         self.task_list.rem(title.as_str());
     }
 
-     //create function to process keyboard input
+    //create function to process keyboard input
 }
-
